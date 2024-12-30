@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .contact-form {
+            background: #ffffff;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .contact-form h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .form-group textarea {
+            resize: none;
+            height: 120px;
+        }
+
+        .contact-form p {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .intl-tel-input {
+            width: 100%;
+        }
+        .rs__contact__form .form-group .iti {
+            width: 100%;
+        }
+        .rs__description__wrap {
+            position: relative;
+        }
+
+        .rs__description__wrap .message-input {
+            padding-right: 30px;
+        }
+
+        .rs__description__wrap svg {
+            position: absolute;
+            right: 12px;
+            top: 40px;
+            height: auto;
+            width: 18px;
+            cursor: pointer;
+            color: black;
+        }
+
+        .rs__description__wrap svg:hover {
+            color: rgb(0 0 0 / 50%);
+        }
+        @media (max-width: 568px) {
+            .contact-form {
+                max-width: 100%;
+                width: 100%;
+                margin: 0px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <form class="contact-form rs__contact__form">
+        <h2>Contact Us</h2>
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" required>
+        </div>
+        <div class="form-group form-send-message rs__description__wrap">
+            <label for="description">Description</label>
+            <textarea id="description" class="message-input" name="description" placeholder="Your Message" required></textarea>
+            <svg class="speech-to-text" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+                <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5"/>
+                <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3"/>
+            </svg>
+        </div>
+        <div class="form-group">
+            <button type="submit">Send</button>
+        </div>
+    </form>
+    <!-- jquery -->
+     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script>
+        const phoneInput = document.querySelector("#phone");
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "auto",
+            geoIpLookup: function(callback) {
+                fetch('https://ipinfo.io/json?token=<YOUR_TOKEN>') // Replace <YOUR_TOKEN> with your ipinfo API token
+                    .then((resp) => resp.json())
+                    .then((data) => callback(data.country))
+                    .catch(() => callback("us"));
+            },
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+        });
+
+        phoneInput.addEventListener("focus", () => {
+            const countryCode = iti.getSelectedCountryData().dialCode;
+            if (!phoneInput.value.includes(`+${countryCode}`)) {
+                phoneInput.value = `+${countryCode} `;
+            }
+        });
+    </script>
+    <script>
+        (function () {
+        const speechToText = $('.speech-to-text'); // ! jQuery dependency for speech to text
+        // Speech To Text
+        if (speechToText.length) {
+          var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+          if (SpeechRecognition !== undefined && SpeechRecognition !== null) {
+            var recognition = new SpeechRecognition(),
+              listening = false;
+            speechToText.on('click', function () {
+              const $this = $(this);
+              recognition.onspeechstart = function () {
+                listening = true;
+              };
+              if (listening === false) {
+                recognition.start();
+              }
+              recognition.onerror = function (event) {
+                listening = false;
+              };
+              recognition.onresult = function (event) {
+                $this.closest('.form-send-message').find('.message-input').val(event.results[0][0].transcript);
+              };
+              recognition.onspeechend = function (event) {
+                listening = false;
+                recognition.stop();
+              };
+            });
+          }
+        }
+      })();
+    </script>
+</body>
+</html>
